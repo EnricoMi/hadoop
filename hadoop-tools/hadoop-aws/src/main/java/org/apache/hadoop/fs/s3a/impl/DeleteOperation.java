@@ -118,6 +118,12 @@ public class DeleteOperation extends ExecutingStoreOperation<Boolean> {
   private final boolean dirOperationsPurgeUploads;
 
   /**
+   * When true, non-empty directories are deleted with a single request
+   * (for S3-compatible endpoints that support it).
+   */
+  private final boolean deleteNonEmptyDirectoryEnabled;
+
+  /**
    * Count of uploads aborted.
    */
   private Optional<Long> uploadsAborted = Optional.empty();
@@ -130,13 +136,15 @@ public class DeleteOperation extends ExecutingStoreOperation<Boolean> {
    * @param callbacks callback provider
    * @param pageSize size of delete pages
    * @param dirOperationsPurgeUploads Do directory operations purge pending uploads?
+   * @param deleteNonEmptyDirectoryEnabled use single delete for non-empty dirs when supported
    */
   public DeleteOperation(final StoreContext context,
       final S3AFileStatus status,
       final boolean recursive,
       final OperationCallbacks callbacks,
       final int pageSize,
-      final boolean dirOperationsPurgeUploads) {
+      final boolean dirOperationsPurgeUploads,
+      final boolean deleteNonEmptyDirectoryEnabled) {
 
     super(context);
     this.status = status;
@@ -149,6 +157,7 @@ public class DeleteOperation extends ExecutingStoreOperation<Boolean> {
     executor = MoreExecutors.listeningDecorator(
         context.createThrottledExecutor(1));
     this.dirOperationsPurgeUploads = dirOperationsPurgeUploads;
+    this.deleteNonEmptyDirectoryEnabled = deleteNonEmptyDirectoryEnabled;
   }
 
   public long getFilesDeleted() {
@@ -223,6 +232,9 @@ public class DeleteOperation extends ExecutingStoreOperation<Boolean> {
       }
       if (status.isEmptyDirectory() == Tristate.TRUE) {
         LOG.debug("deleting empty directory {}", path);
+        deleteObjectAtPath(path, key, false);
+      } else if (deleteNonEmptyDirectoryEnabled) {
+        LOG.debug("deleting non-empty directory {} with single request (endpoint supports it)", path);
         deleteObjectAtPath(path, key, false);
       } else {
         deleteDirectoryTree(path, key);

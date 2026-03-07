@@ -1768,6 +1768,20 @@ public final class Constants {
    */
   public static final boolean DIRECTORY_OPERATIONS_PURGE_UPLOADS_DEFAULT = false;
 
+  /**
+   * When true, recursive delete of a non-empty directory sends a single delete
+   * request for the directory key (prefix) instead of listing and deleting
+   * contained objects. Only enable for S3-compatible endpoints that support
+   * deleting a non-empty directory (path prefix) in one request (e.g. VAST).
+   * Value: {@value}.
+   */
+  public static final String DELETE_NON_EMPTY_DIRECTORY_ENABLED =
+      "fs.s3a.delete.non-empty-directory.enabled";
+
+  /**
+   * Default value of {@link #DELETE_NON_EMPTY_DIRECTORY_ENABLED}: {@value}.
+   */
+  public static final boolean DELETE_NON_EMPTY_DIRECTORY_ENABLED_DEFAULT = false;
 
   /**
    * Is the higher performance copy from local file to S3 enabled?
