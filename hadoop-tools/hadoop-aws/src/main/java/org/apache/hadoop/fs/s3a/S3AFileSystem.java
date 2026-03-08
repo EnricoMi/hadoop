@@ -411,9 +411,8 @@ public class S3AFileSystem extends FileSystem implements StreamCapabilities,
   private boolean dirOperationsPurgeUploads;
 
   /**
-   * When true, recursive delete of a non-empty directory uses a single
-   * delete request for the directory key (for S3-compatible endpoints that
-   * support it).
+   * When true, recursive deletion of a non-empty directory uses a single delete
+   * request for the directory key (for S3-compatible endpoints that support it).
    */
   private boolean deleteNonEmptyDirectoryEnabled;
 

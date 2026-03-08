@@ -1769,10 +1769,10 @@ public final class Constants {
   public static final boolean DIRECTORY_OPERATIONS_PURGE_UPLOADS_DEFAULT = false;
 
   /**
-   * When true, recursive delete of a non-empty directory sends a single delete
-   * request for the directory key (prefix) instead of listing and deleting
-   * contained objects. Only enable for S3-compatible endpoints that support
-   * deleting a non-empty directory (path prefix) in one request (e.g. VAST).
+   * When true, recursive deletion of a non-empty directory uses a single delete
+   * request for the directory key (prefix) instead of listing and deleting contained
+   * objects first. Only enable this for S3-compatible endpoints that support
+   * deleting non-empty directories (path prefix) in one request (e.g. VAST).
    * Value: {@value}.
    */
   public static final String DELETE_NON_EMPTY_DIRECTORY_ENABLED =

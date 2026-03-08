@@ -1748,7 +1748,7 @@
 <property>
   <name>fs.s3a.multiobjectdelete.enable</name>
   <value>true</value>
-  <description>When enabled, multiple single-object delete requests are replaced by
+  <description>When true, multiple single-object delete requests are replaced by
     a single 'delete multiple objects'-request, reducing the number of requests.
     Beware: legacy S3-compatible object stores might not support this request.
   </description>
