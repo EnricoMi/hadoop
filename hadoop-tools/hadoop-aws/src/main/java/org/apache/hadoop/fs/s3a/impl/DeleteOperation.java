@@ -50,7 +50,17 @@ import static org.apache.hadoop.fs.s3a.impl.CallableSupplier.submit;
 
 /**
  * Implementation of the delete() operation.
- * This issues only one bulk delete at a time,
+ * A non-empty directory, as well as a directory where its emptiness
+ * is unknown, is deleted by listing all contained files (or objects
+ * with matching key prefix), then deleting those files (objects) in
+ * bulk delete requests, and finally deleting the (then) empty
+ * directory itself.
+ * <p>
+ * When "fs.s3a.delete.non-empty-directory.enabled" is true, only
+ * one delete request is sent for the directory (key prefix). The
+ * S3 endpoint has to support this feature.
+ * <p>
+ * Bulk deletes are issued only one at a time,
  * intending to update S3Guard after every request succeeded.
  * Now that S3Guard has been removed, it
  * would be possible to issue multiple delete calls
@@ -175,6 +185,16 @@ public class DeleteOperation extends ExecutingStoreOperation<Boolean> {
 
   /**
    * Delete a file or directory tree.
+   * <p>
+   * A non-empty directory, as well as a directory where its emptiness
+   * is unknown, is deleted by listing all contained files (or objects
+   * with matching key prefix), then deleting those files (objects) in
+   * bulk delete requests, and finally deleting the (then) empty
+   * directory itself.
+   * <p>
+   * When "fs.s3a.delete.non-empty-directory.enabled" is true, only
+   * one delete request is sent for the directory (key prefix). The
+   * S3 endpoint has to support this feature.
    * <p>
    * This call does not create any fake parent directory; that is
    * left to the caller.
