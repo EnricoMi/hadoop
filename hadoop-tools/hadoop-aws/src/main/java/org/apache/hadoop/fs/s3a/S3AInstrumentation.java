@@ -545,6 +545,13 @@ public class S3AInstrumentation implements Closeable, MetricsSource,
   }
 
   /**
+   * Indicate that S3A just deleted a non-empty directory.
+   */
+  public void nonEmptyDirectoryDeleted() {
+    incrementCounter(NON_EMPTY_DIRECTORIES_DELETED, 1);
+  }
+
+  /**
    * Indicate that S3A copied some files within the store.
    *
    * @param files number of files

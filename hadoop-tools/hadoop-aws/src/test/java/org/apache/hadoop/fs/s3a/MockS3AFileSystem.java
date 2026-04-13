@@ -356,7 +356,8 @@ public class MockS3AFileSystem extends S3AFileSystem {
   @Override
   void deleteObjectAtPath(Path f,
       String key,
-      boolean isFile)
+      boolean isFile,
+      final boolean isEmptyDir)
       throws SdkException, IOException {
     mock.getS3AInternals()
             .getAmazonS3Client("test")

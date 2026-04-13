@@ -340,7 +340,7 @@ public class RenameOperation extends ExecutingStoreOperation<Long> {
         copyDestinationKey);
     bytesCopied.addAndGet(sourceStatus.getLen());
     // delete the source
-    callbacks.deleteObjectAtPath(sourcePath, sourceKey, true);
+    callbacks.deleteObjectAtPath(sourcePath, sourceKey, true, false);
     return copyDestinationPath;
   }
 
@@ -383,7 +383,7 @@ public class RenameOperation extends ExecutingStoreOperation<Long> {
           destStatus.getPath());
       // Although the dir marker policy doesn't always need to do this,
       // it's simplest just to be consistent here.
-      callbacks.deleteObjectAtPath(destStatus.getPath(), dstKey, false);
+      callbacks.deleteObjectAtPath(destStatus.getPath(), dstKey, false, true);
     }
 
     Path parentPath = storeContext.keyToPath(srcKey);

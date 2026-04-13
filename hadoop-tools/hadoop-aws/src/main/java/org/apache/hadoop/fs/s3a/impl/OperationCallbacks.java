@@ -95,7 +95,8 @@ public interface OperationCallbacks {
   @Retries.RetryTranslated
   void deleteObjectAtPath(Path path,
       String key,
-      boolean isFile)
+      boolean isFile,
+      final boolean isEmptyDir)
       throws IOException;
 
   /**

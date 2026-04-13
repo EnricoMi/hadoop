@@ -2622,11 +2622,12 @@ public class S3AFileSystem extends FileSystem implements StreamCapabilities,
     @Retries.RetryTranslated
     public void deleteObjectAtPath(final Path path,
         final String key,
-        final boolean isFile)
+        final boolean isFile,
+        final boolean isEmptyDir)
         throws IOException {
       auditSpan.activate();
       once("delete", path.toString(), () ->
-          S3AFileSystem.this.deleteObjectAtPath(path, key, isFile));
+          S3AFileSystem.this.deleteObjectAtPath(path, key, isFile, isEmptyDir));
     }
 
     @Override
@@ -3220,18 +3221,22 @@ public class S3AFileSystem extends FileSystem implements StreamCapabilities,
    * @param f path path to delete
    * @param key key of entry
    * @param isFile is the path a file (used for instrumentation only)
+   * @param isEmptyDir whether the directory is empty (used for instrumentation only)
    * @throws SdkException problems working with S3
    * @throws IOException from invoker signature only -should not be raised.
    */
   @Retries.RetryRaw
   void deleteObjectAtPath(Path f,
       String key,
-      boolean isFile)
+      boolean isFile,
+      boolean isEmptyDir)
       throws SdkException, IOException {
     if (isFile) {
       instrumentation.fileDeleted(1);
-    } else {
+    } else if (isEmptyDir) {
       instrumentation.directoryDeleted();
+    } else{
+      instrumentation.nonEmptyDirectoryDeleted();
     }
     deleteObject(key);
   }

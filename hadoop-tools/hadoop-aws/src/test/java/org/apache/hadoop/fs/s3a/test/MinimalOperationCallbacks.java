@@ -74,7 +74,8 @@ public class MinimalOperationCallbacks
   public void deleteObjectAtPath(
       Path path,
       String key,
-      boolean isFile)
+      boolean isFile,
+      boolean isEmptyDir)
       throws IOException {
 
   }

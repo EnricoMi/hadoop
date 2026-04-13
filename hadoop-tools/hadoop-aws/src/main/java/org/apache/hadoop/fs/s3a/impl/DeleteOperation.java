@@ -232,10 +232,10 @@ public class DeleteOperation extends ExecutingStoreOperation<Boolean> {
       }
       if (status.isEmptyDirectory() == Tristate.TRUE) {
         LOG.debug("deleting empty directory {}", path);
-        deleteObjectAtPath(path, key, false);
+        deleteObjectAtPath(path, key, false, true);
       } else if (deleteNonEmptyDirectoryEnabled) {
         LOG.debug("deleting non-empty directory {} with single request (endpoint supports it)", path);
-        deleteObjectAtPath(path, key, false);
+        deleteObjectAtPath(path, key, false, false);
       } else {
         deleteDirectoryTree(path, key);
       }
@@ -243,7 +243,7 @@ public class DeleteOperation extends ExecutingStoreOperation<Boolean> {
     } else {
       // simple file.
       LOG.debug("deleting simple file {}", path);
-      deleteObjectAtPath(path, key, true);
+      deleteObjectAtPath(path, key, true, false);
     }
     LOG.debug("Deleted {} objects", filesDeleted);
     return true;
@@ -388,11 +388,12 @@ public class DeleteOperation extends ExecutingStoreOperation<Boolean> {
   private void deleteObjectAtPath(
       final Path path,
       final String key,
-      final boolean isFile)
+      final boolean isFile,
+      final boolean isEmptyDir)
       throws IOException {
-    LOG.debug("delete: {} {}", (isFile ? "file" : "dir marker"), key);
+    LOG.debug("delete: {} {}", (isFile ? "file" : (isEmptyDir ? "dir marker" : "non-empty dir")), key);
     filesDeleted++;
-    callbacks.deleteObjectAtPath(path, key, isFile);
+    callbacks.deleteObjectAtPath(path, key, isFile, isEmptyDir);
   }
 
   /**
