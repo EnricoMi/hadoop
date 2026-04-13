@@ -536,7 +536,7 @@ public class WriteOperationHelper implements WriteOperations {
         withinAuditSpan(getAuditSpan(), () -> {
           Path destPath = owner.keyToQualifiedPath(destKey);
           owner.deleteObjectAtPath(destPath,
-              destKey, true);
+              destKey, true, false);
         }));
   }
 

@@ -263,6 +263,10 @@ public enum Statistic {
       "Calls of getXAttrs(Path path, List<String> names)",
       TYPE_DURATION),
 
+  NON_EMPTY_DIRECTORIES_DELETED("non_empty_directories_deleted",
+        "Total number of non-empty directories deleted through the object store.",
+        TYPE_COUNTER),
+
   /* Object IO */
   OBJECT_COPY_REQUESTS(StoreStatisticNames.OBJECT_COPY_REQUESTS,
       "Object copy requests",
